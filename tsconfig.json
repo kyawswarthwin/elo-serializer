@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "lib": ["ES2020", "DOM"],
+    "target": "es2020",
+    "module": "es2020",
+    "moduleResolution": "node",
+    "lib": ["es2020", "dom"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true
-  },
-  "include": ["src/**/*"]
+  }
 }
