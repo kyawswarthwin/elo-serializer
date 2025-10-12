@@ -21,7 +21,7 @@ export type ELOInfer<S> = S extends keyof ELOTypeMap
       ? { [K in keyof S]: ELOInfer<S[K]> }
       : never;
 
-export interface ELOTypeMap {
+interface ELOTypeMap {
   int8: number;
   int16: number;
   int32: number;
@@ -251,12 +251,17 @@ class ELOPackage {
     }
 
     for (const key in s) {
+      if (key === '__checkSum') {
+        continue;
+      }
+
       const type = s[key];
+      const value = d[key];
 
       if (typeof type === 'string') {
-        w.write(type, d[key] as ELOTypeMap[ELOTypes]);
+        w.write(type, value as ELOTypeMap[ELOTypes]);
       } else if (Array.isArray(type)) {
-        const array = d[key] as (ELOTypeMap[ELOTypes] | ELOInfer<ELOSchema>)[];
+        const array = value as (ELOTypeMap[ELOTypes] | ELOInfer<ELOSchema>)[];
         w.write('uint16', array.length);
         const elementType = type[0];
 
@@ -265,16 +270,16 @@ class ELOPackage {
         }
 
         if (typeof elementType === 'object') {
-          for (const item of array as ELOInfer<ELOSchema>[]) {
-            this.pack(elementType, item, w);
+          for (const item of array) {
+            this.pack(elementType, item as ELOInfer<ELOSchema>, w);
           }
         } else {
-          for (const item of array as ELOTypeMap[ELOTypes][]) {
-            w.write(elementType, item);
+          for (const item of array) {
+            w.write(elementType, item as ELOTypeMap[ELOTypes]);
           }
         }
       } else if (typeof type === 'object') {
-        this.pack(type, d[key] as ELOInfer<ELOSchema>, w);
+        this.pack(type, value as ELOInfer<ELOSchema>, w);
       }
     }
 

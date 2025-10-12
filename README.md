@@ -19,19 +19,19 @@ const schema = {
   address: {
     street: 'binary',
     city: 'binary',
-    coords: ['float'],
   },
+  phones: ['binary'],
 } as const satisfies ELOSchema;
 
 const encoder = new TextEncoder();
 const data: ELOInfer<typeof schema> = {
-  id: 123,
+  id: 1,
   name: encoder.encode('Maung Maung').buffer,
   address: {
     street: encoder.encode('123 Sule Pagoda Road').buffer,
     city: encoder.encode('Yangon').buffer,
-    coords: [16.8471, 96.1561],
   },
+  phones: [encoder.encode('0912345678').buffer, encoder.encode('0998765432').buffer],
 };
 
 const buffer = eloPack(schema, data);
@@ -43,17 +43,17 @@ console.log({
   name: decoder.decode(unpacked.name),
   street: decoder.decode(unpacked.address.street),
   city: decoder.decode(unpacked.address.city),
-  coords: unpacked.address.coords,
+  phones: unpacked.phones.map((p) => decoder.decode(p)),
 });
 ```
 
-## Type Reference
+## Schema Types
 
-- **Numbers**: `int8`, `int16`, `int32`, `uint8`, `uint16`, `uint32`, `float`
+- **Numeric**: `int8`, `int16`, `int32`, `uint8`, `uint16`, `uint32`, `float`
 - **Boolean**: `bool`
-- **Binary**: `binary` (use with TextEncoder/TextDecoder for strings)
-- **Arrays**: `[type]`
-- **Objects**: nested schemas
+- **Binary**: `binary` (use with `TextEncoder`/`TextDecoder` for strings)
+- **Array**: `[type]`
+- **Object**: nested schemas
 
 ## License
 
