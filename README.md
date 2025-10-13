@@ -19,8 +19,8 @@ const schema = {
   address: {
     street: 'binary',
     city: 'binary',
+    coords: ['float'],
   },
-  phones: ['binary'],
 } as const satisfies ELOSchema;
 
 const encoder = new TextEncoder();
@@ -30,8 +30,8 @@ const data: ELOInfer<typeof schema> = {
   address: {
     street: encoder.encode('123 Sule Pagoda Road').buffer,
     city: encoder.encode('Yangon').buffer,
+    coords: [16.8471, 96.1561],
   },
-  phones: [encoder.encode('0912345678').buffer, encoder.encode('0998765432').buffer],
 };
 
 const buffer = eloPack(schema, data);
@@ -43,7 +43,7 @@ console.log({
   name: decoder.decode(unpacked.name),
   street: decoder.decode(unpacked.address.street),
   city: decoder.decode(unpacked.address.city),
-  phones: unpacked.phones.map((p) => decoder.decode(p)),
+  coords: unpacked.address.coords,
 });
 ```
 

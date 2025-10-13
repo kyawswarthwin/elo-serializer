@@ -1,6 +1,6 @@
 {
   "name": "elo-serializer",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Lightweight, schema-based binary serialization with TypeScript type safety",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

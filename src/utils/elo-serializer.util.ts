@@ -251,10 +251,6 @@ class ELOPackage {
     }
 
     for (const key in s) {
-      if (key === '__checkSum') {
-        continue;
-      }
-
       const type = s[key];
       const value = d[key];
 
